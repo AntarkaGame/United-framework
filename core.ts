@@ -726,19 +726,19 @@ namespace United {
         private elapsedFrame: number;
         private started: boolean;
 
-        constructor(autoStart?: boolean) {
+        constructor(autoStart?: boolean = true) {
             super();
             this.reset();
-            this.started = autoStart || true;
+            this.started = autoStart;
         }
 
-        public start() {
+        public start() : void {
             this.emit("start");
             this.started = true;
             this.reset();
         }
 
-        public stop() {
+        public stop() : void {
             this.emit("stop");
             this.started = false;
         }
@@ -760,7 +760,7 @@ namespace United {
             return (this.started && this.elapsedFrame % interval == 0) ? true : false;
         }
 
-        public elapsed(elapsedFrame: number) {
+        public elapsed(elapsedFrame: number) : boolean {
             return (this.started && this.elapsedFrame >= elapsedFrame) ? true : false;
         }
 
