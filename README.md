@@ -20,28 +20,7 @@ United.Engine.activeScene = "menu";
 
 This is the most important part of the framework. We want to know the structure schema of your game (here described by your main scenes). With the United framework each scene have their own variables environment & their own addons.
 
-The second step is making your own global variables with the chunk collection :
-
-```ts
-interface IPlayer {
-    name: string;
-    exp: number;
-    level: number;
-}
-const Player : United.Collections.Chunk<IPlayer> = new United.Collections.Chunk<IPlayer>({
-    name: "fraxken",
-    exp: 0,
-    level: 0
-});
-Sup.log(Player.$.name); // log fraxken
-Player.$.level = 10; // Set level to 10
-Player.resetVar("level"); // Reset level to the original value : 0
-Player.reset(); // Reset all variables of player chunk.
-```
-
-> Chunk is not a miracle "solution". You have to use properties of behavior in the most case. Chunk collection can be very usefull on a "level" oriented game like Spherunner.
-
-Now it's done ! You have just to make your game with United addons & normal superpowers components.
+The second step is making your own global variables (maybe with chunk if this is required). Now it's done ! You have just to make your game with United addons & normal superpowers components.
 
 # Roadmap
 
