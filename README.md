@@ -2,7 +2,7 @@
 
 The united framework bring a structure to build your game on a safe and flexible foundation. We made it to be efficient and type safe. We are targeting a framework capable of controlling it's execution environment to be sure that all parts of the game is under control.
 
-United-framework is a high-level implementation for Superpowers components. The goal is not changing the original superpowers behaviors (that can be the bigest mistake your made).
+United-framework is a `high-level implementation for Superpowers components`. The goal is not changing the original superpowers behaviors (that can be the bigest mistake your made).
 
 This framework is under development and we need your help to make new cool addons !
 
@@ -14,11 +14,11 @@ Find the wiki on the "wiki" tabs. Or by clicking [!!here!!](https://github.com/f
 
 ### Install the framework
 
-Download core.ts and addons.ts and install them in empty superpowers script. core.ts must be the first file in the tree. I strongly recommend to put the framework at the top of your project on a separated directory named "united".
+Download `core.ts` and `addons.ts` and install them in a empty superpowers script. `core.ts` must be the **first file in the tree**. I strongly recommend to **put the framework at the top of your project** on a separated directory named "united".
 
 ### Configure the Engine class
 
-Make a "global" script on your superpowers project and put it under the "united" directory.
+First, make a script named "Globals" on your superpowers project and put it under the "united" directory.
 
 Now register your main scenes into the engine :
 
