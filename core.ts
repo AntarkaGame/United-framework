@@ -585,10 +585,10 @@ namespace United {
     export class Engine {
 
         public static activeScene: string;
+        public static active: boolean = true;
 
         private static updated: boolean = false;
         private static storageScenes : { [key:string] : United.Scenes_Storages } = {};
-        private static active: boolean = true;
 
         public static chunk : United.Collections.Chunk<any> = new United.Collections.Chunk<any>();
         public static get $() {
@@ -614,6 +614,9 @@ namespace United {
             }
 
             if(!this.storageScenes[name] ) {
+                if(!this.activeScene) {
+                    this.activeScene = name;
+                }
                 this.storageScenes[name] = {
                     name: name,
                     scenePath: assetPath,
