@@ -14,7 +14,7 @@ namespace United {
             constructor(name: string,defaultVolume : number) {
                 this.store = [];
                 this.name = name;
-                this.defaultVolume = Utils.clampNumber(defaultVolume,[0,1]);
+                this.defaultVolume = United.Utils.clampNumber(defaultVolume,[0,1]);
                 this.volume = this.defaultVolume;
                 United.Audio.Controller.controllerStore[this.name] = this;
             }
@@ -24,14 +24,14 @@ namespace United {
             }
 
             public static setVolume(name: string,volume: number) : boolean {
-                if(Utils.has(United.Audio.Controller.controllerStore,name)) {
+                if(United.Utils.has(United.Audio.Controller.controllerStore,name)) {
                     return United.Audio.Controller.controllerStore[name].setVolume(volume);
                 }
                 return false;
             }
 
             setVolume(volume: number) : boolean {
-                this.volume = Utils.clampNumber(volume,[0,1]);
+                this.volume = United.Utils.clampNumber(volume,[0,1]);
                 this.store.forEach( (SoundAsset : Sup.Audio.SoundPlayer) => {
                     SoundAsset.setVolume(this.volume);
                 });
@@ -108,14 +108,14 @@ namespace United {
 
             constructor(private tracksList : { [key:number] : United.Audio.trackOption },options?: playlistOption) {
                 super();
-                this.playlistSize = Utils.objectSize(this.tracksList);
+                this.playlistSize = United.Utils.objectSize(this.tracksList);
                 let track : number;
                 options = options || {};
                 if(options.defaultTrack && !options.startRandom) {
                     track = options.defaultTrack;
                 }
                 else if(options.startRandom) {
-                    track = Utils.getRandom(0,this.playlistSize);
+                    track = United.Utils.getRandom(0,this.playlistSize);
                     this.startRandom = true;
                 }
                 else {

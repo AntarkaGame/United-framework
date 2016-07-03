@@ -445,6 +445,53 @@ namespace United {
         United.Engine.update();
     }
 
+    export namespace Utils {
+
+        export function clampNumber(number : number,clamp : [number,number]) : number {
+            return window.Math.min(window.Math.max(number, clamp[0]), clamp[1]);
+        }
+
+        export const has = function(obj: any, prop: any) : boolean {
+            return Object.prototype.hasOwnProperty.call(obj, prop);
+        }
+
+        export function randomObject(object:any) : any {
+            const keys = Object.keys(object);
+            return object[keys[ keys.length * window.Math.random() << 0]];
+        }
+
+        export function merge(obj1, obj2) {
+            for (const p in obj2) {
+                try {
+                    obj1[p] = ( obj2[p].constructor==Object ) ? merge(obj1[p], obj2[p]) : obj2[p];
+                }
+                catch(e) {
+                    obj1[p] = obj2[p];
+                }
+            }
+            return obj1;
+        }
+
+        export function objectSize(obj) : number {
+            let size : number = 0;
+            for(const key in obj) {
+                if (obj.hasOwnProperty(key)) size++;
+            }
+            return size;
+        }
+
+        export function generateRandomVector2(range:number) : Sup.Math.Vector2 {
+            const x : number = Sup.Math.Random.float(-range, range);
+            const y : number = Sup.Math.Random.float(-range, range);
+            return new Sup.Math.Vector2(x, y);
+        }
+
+        export function getRandom(min: number, max: number) : number {
+          return window.Math.random() * (max - min) + min;
+        }
+
+    }
+
     export class Font {
         public static Default : string = `${Path}Exo-regular`;
         public static Exo : { [key:string] : string } = {
