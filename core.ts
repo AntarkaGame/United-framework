@@ -80,8 +80,7 @@ namespace United {
 
             public resetAll() : void {
                 if(this._auth) {
-                    for(const key in this.$)
-                        this.$[key] = this.defaultValues[key];
+                    for(const key in this.$) this.$[key] = this.defaultValues[key];
                 }
             }
 
