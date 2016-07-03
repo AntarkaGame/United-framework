@@ -555,6 +555,7 @@ namespace United {
             super(actor);
             this.__emitter = new EventEmitter();
             this.__timer = new United.Timer(true);
+            actor["events"] = this.__emitter;
         }
 
         awake() {}
