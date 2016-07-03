@@ -596,7 +596,7 @@ namespace United {
         private static storageScenes : { [key:string] : United.Scenes_Storages } = {};
 
         public static chunk : United.Collections.Chunk<any> = new United.Collections.Chunk<any>();
-        public static get $() {
+        public static get $() : United.Collections.Chunk<any> {
             return this.chunk.$;
         }
 
@@ -642,12 +642,12 @@ namespace United {
             return false;
         }
 
-        public static break(sleepTime?:number) {
+        public static break(sleepTime?:number) : void {
             this.active = false;
             if(sleepTime) setTimeout(() => this.active = true,sleepTime*1000);
         }
 
-        public static update() {
+        public static update() : void {
             if(this.active && this.activeScene) {
                 this.storageScenes[this.activeScene].addons.forEach( (addon: United.Addons) => addon.update());
             }
