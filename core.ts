@@ -540,11 +540,6 @@ namespace United {
     }
 
     /*
-        United.Clock : Horloge global de votre scène courante!
-    */
-    export let Clock : United.Timer;
-
-    /*
         United Behavior ! (Behavior linked to the United Engine).
     */
     export class Behavior extends Sup.Behavior {
@@ -633,7 +628,6 @@ namespace United {
             if(this.storageScenes[name]) {
                 this.storageScenes[this.activeScene].addons = [];
                 this.activeScene = name;
-                United.Clock.reset();
                 Sup.loadScene(this.storageScenes[name].scenePath);
                 return true;
             }
@@ -646,12 +640,6 @@ namespace United {
         }
 
         public static update() {
-            if(United.Clock) {
-                United.Clock.update();
-            }
-            else {
-                United.Clock = new United.Timer();
-            }
             if(this.active && this.activeScene) {
                 this.storageScenes[this.activeScene].addons.forEach( (addon: United.Addons) => addon.update());
             }
