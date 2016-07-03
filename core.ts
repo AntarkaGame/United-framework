@@ -498,12 +498,16 @@ namespace United {
             regular :       `${Path}Exo-regular`
         }
 
-        public static add(name:string, font:Sup.Asset) : boolean {
+        public static add(name:string, asset:Sup.Asset) : boolean {
             if(!this[name]) {
-                this[name] = font;
+                this[name] = asset;
                 return true;
             }
             return false;
+        }
+
+        public static get(fontName: string) : string {
+            return this[fontName];
         }
 
     }
@@ -520,7 +524,7 @@ namespace United {
             }
         }
 
-        export function is(path: string,type: string) {
+        export function is(path: string,type: string) : boolean {
             if(United.Tree.exist(path)) {
                 if(typeof Sup.get(path) === type) return true;
             }
