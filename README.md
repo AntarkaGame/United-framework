@@ -1,3 +1,5 @@
+> Warning breaking change are comming in the V1.1. ETA 09/07/2016
+
 # United framework
 
 The united framework bring a structure to build your game on a safe and flexible foundation. We made it to be efficient and type safe. We are targeting a framework capable of controlling it's execution environment to be sure that all parts of the game is under control.
