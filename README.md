@@ -25,9 +25,18 @@ First, make a script named "Globals" on your superpowers project and put it unde
 Now register your main scenes into the engine :
 
 ```ts
-United.Engine.activeScene = "menu"; // If you dont set activeScene, the activeScene is the first scene added to the Engine!
-United.Engine.addScene("menu","Projets/Scenes/menu");
-United.Engine.addScene("game","Projets/Scenes/Jeu");
+interface IGame {
+    Map: Sup.Actor;
+}
+
+const GameScene: United.Scene<IGame> = new United.Scene<IGame>({
+    name: "game",
+    asset: "Project/Scenes/Game"
+});
+
+GameScene.on("load",() => {
+    Sup.log("Game scene is loaded !!!");
+});
 ```
 
 > Note :  We are working on a united "startup" scene for soon... A lot of modification are coming for the next week-end.
@@ -35,7 +44,7 @@ United.Engine.addScene("game","Projets/Scenes/Jeu");
 Addons & Engine work with no help ! If you want to change the scene dont use Sup.loadScene but :
 
 ```ts
-United.Engine.loadScene("game");
+United.Engine.startupScene("game");
 ```
 
 Engine have to work on clearing inactive addons & inactive variables from the activeScene before switching to the new scene.
@@ -50,13 +59,12 @@ Make your own addons for your game ! For an example look into the [documentation
 
 - Make a superpowers plugin that work with the github.
 - Make a complete wiki!
-- Better actors communications & events (with EventEmitter & engine chunks).
 - Update collections (better performance, better methodes ...)
 - Add immutables collections.
-- Work on the engine. (Better team work between core addons).
 - Rework Area (For interaction and collision).
 - Add a log class (core). All official addons must have a log system installed!
 - Create an observe/mapping system for chunk with EventEmitter.
+- Better addons communication.
 
 # Roadmap plugins
 
