@@ -625,11 +625,49 @@ namespace United {
     /*
         Addons abstract class (auto-register to the active scene and auto update the addon).
     */
+    interface AddonConstructor {
+        defaultName: string;
+        global?: boolean;
+        lockingScene?: string;
+        parentAddon ?: United.Addons;
+    }
+
     export abstract class Addons extends EventEmitter {
-        constructor() {
+
+        public __name: string = "Undefined_plugin";
+        private __lockName: string;
+        private __parentAddon: United.Addons;
+        protected log: United.Log.Main;
+
+        constructor(constructorOpt: AddonConstructor) {
             super();
-            United.Engine.registerAddon(this);
+            if (constructorOpt.lockingScene) this.__lockName = constructorOpt.lockingScene;
+            if (constructorOpt.defaultName) this.__name = constructorOpt.defaultName;
+            if (constructorOpt.parentAddon) this.__parentAddon = constructorOpt.parentAddon;
+            const opts = {
+                addon: this,
+                globalRegistering: constructorOpt.global ? true : false,
+                sceneName: constructorOpt.lockingScene,
+                parentAddon: constructorOpt.parentAddon ? true : false,
+            }
+            if (!United.Engine.registerAddon(opts)) {
+                Sup.setTimeout(1000, () => {
+                    if (!United.Engine.registerAddon(opts)) {
+                        console.warn("Failed to register a new Addon!");
+                        delete this;
+                    }
+                });
+            }
         }
+
+        get lockingName(): string {
+            return this.__lockName;
+        }
+
+        get parent(): United.Addons {
+            return this.__parentAddon;
+        }
+
         abstract update();
     }
 
