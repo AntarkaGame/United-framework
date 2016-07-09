@@ -1,6 +1,6 @@
 > Warning breaking change are comming in the V1.2. ETA 17/07/2016
 
-# United framework
+# United framework v1.1
 
 The united framework bring a structure to build your game on a safe and flexible foundation. We made it to be efficient and type safe. We are targeting a framework capable of controlling it's execution environment to be sure that all parts of the game is under control.
 
@@ -37,6 +37,7 @@ const GameScene: United.Scene<IGame> = new United.Scene<IGame>({
 GameScene.on("load",() => {
     Sup.log("Game scene is loaded !!!");
 });
+United.Engine.startupScene("game"); // Dont set a "default" scene on superpowers. Put this line!
 ```
 
 > Note :  We are working on a united "startup" scene for soon... A lot of modification are coming for the next week-end.
@@ -44,7 +45,7 @@ GameScene.on("load",() => {
 Addons & Engine work with no help ! If you want to change the scene dont use Sup.loadScene but :
 
 ```ts
-United.Engine.startupScene("game");
+United.Engine.loadScene("game");
 ```
 
 Engine have to work on clearing inactive addons & inactive variables from the activeScene before switching to the new scene.
