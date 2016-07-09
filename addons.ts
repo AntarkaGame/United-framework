@@ -107,7 +107,9 @@ namespace United {
             public startRandom : boolean = false;
 
             constructor(private tracksList : { [key:number] : United.Audio.trackOption },options?: playlistOption) {
-                super();
+                super({
+                    defaultName: "Playlist"
+                });
                 this.playlistSize = United.Utils.objectSize(this.tracksList);
                 let track : number;
                 options = options || {};
