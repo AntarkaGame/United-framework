@@ -491,6 +491,49 @@ namespace United {
 
     }
 
+    export namespace Exception {
+
+        declare class Error {
+            public name: string;
+            public message: string;
+            public stack: string;
+            constructor(message ? : string);
+        }
+
+        export class InternalError extends Error {
+
+            constructor(message: string = "United internal error") {
+                super(message);
+                United.Engine.events.emit("InternalError",message);
+                this.name = 'InternalError';
+                this.message = message;
+                this.stack = (<any>new Error()).stack;
+            }
+
+            public toString(): string {
+                return this.name + ': ' + this.message;
+            }
+
+        }
+
+        export class NotImplemented extends Error {
+
+            constructor(message: string = "Method is not implemented!") {
+                super(message);
+                United.Engine.events.emit("NotImplemented",message);
+                this.name = 'NotImplementedException';
+                this.message = message;
+                this.stack = (<any>new Error()).stack;
+            }
+
+            public toString(): string {
+                return this.name + ': ' + this.message;
+            }
+
+        }
+
+    }
+
     export class Font {
         public static Default : string = `${Path}Exo-regular`;
         public static Exo : { [key:string] : string } = {
