@@ -674,15 +674,15 @@ namespace United {
     /*
         United Behavior ! (Behavior linked to the United Engine).
     */
-    export class Behavior extends Sup.Behavior {
+    export class Behavior<T> extends Sup.Behavior {
 
         private __timer: United.Timer;
-        protected __emitter : EventEmitter;
+        protected __emitter: EventEmitter;
 
         constructor(actor: Sup.Actor) {
             super(actor);
-            this.__emitter = new EventEmitter();
-            this.__timer = new United.Timer(true);
+            this.__emitter  = new EventEmitter();
+            this.__timer    = new United.Timer(true);
             actor["events"] = this.__emitter;
         }
 
@@ -691,19 +691,19 @@ namespace United {
         onDestroy() {}
         update() {}
 
-        public get events() : EventEmitter {
+        public get events(): EventEmitter {
             return this.__emitter;
         }
 
-        protected get $() {
-            return United.Engine.$;
+        protected get $(): T {
+            return United.Engine.$<T>();
         }
 
-        protected walk(interval: number) : boolean {
+        protected walk(interval: number): boolean {
             return this.__timer.walk(interval);
         }
 
-        protected elapsed(elapsedTime: number) : boolean {
+        protected elapsed(elapsedTime: number): boolean {
             return this.__timer.elapsed(elapsedTime);
         }
 
