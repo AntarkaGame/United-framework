@@ -1,3 +1,6 @@
+declare var window: any;
+declare var console: any;
+
 namespace United {
 
     export module Collections {
