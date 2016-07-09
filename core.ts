@@ -554,7 +554,7 @@ namespace United {
 
     }
 
-    export module Tree {
+    export namespace Tree {
 
         export function exist(path: string) : boolean {
             try {
@@ -564,13 +564,6 @@ namespace United {
             catch(Err) {
                 return false;
             }
-        }
-
-        export function is(path: string,type: string) : boolean {
-            if(United.Tree.exist(path)) {
-                if(typeof Sup.get(path) === type) return true;
-            }
-            return false;
         }
     }
 
