@@ -985,3 +985,5 @@ namespace United {
 
 }
 import U = United;
+United.Main();
+Sup.setInterval(1000 / United.FPS,United.Main);
