@@ -1,4 +1,4 @@
-> Warning breaking change are comming in the V1.1. ETA 09/07/2016
+> Warning breaking change are comming in the V1.2. ETA 17/07/2016
 
 # United framework
 
