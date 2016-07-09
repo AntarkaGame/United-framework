@@ -204,7 +204,7 @@ namespace United {
 
     }
 
-    export module StackControls {
+    export namespace StackControls {
 
         export interface ActionConstructor {
             keyboard?: string[];
