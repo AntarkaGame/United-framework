@@ -948,8 +948,10 @@ namespace United {
         private elapsedFrame: number;
         private started: boolean;
 
-        constructor(autoStart?: boolean = true) {
-            super();
+        constructor(autoStart: boolean = true) {
+            super({
+                defaultName: "Timer"
+            });
             this.reset();
             this.started = autoStart;
         }
@@ -983,7 +985,7 @@ namespace United {
         }
 
         public elapsed(elapsedFrame: number) : boolean {
-            return (this.started && this.elapsedFrame >= elapsedFrame) ? true : false;
+            return (this.started && this.elapsedFrame == elapsedFrame) ? true : false;
         }
 
     }
