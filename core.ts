@@ -574,6 +574,54 @@ namespace United {
         }
     }
 
+    export namespace Log {
+
+        export let level: number = 0;
+        export let debug: boolean = true;
+
+        export enum Severity {
+            critical = 0,
+                major = 1,
+                minor = 2,
+                debug = 3,
+                information = 4
+        }
+
+        export interface Message {
+            severity ? : United.Log.Severity;
+            message: string;
+        }
+
+        export class Main {
+
+            private level: number;
+            private store: United.Collections.PriorityQueue<United.Log.Message>;
+
+            constructor(level ? : number) {
+                this.level = level || United.Log.level;
+                this.store = new United.Collections.PriorityQueue < United.Log.Message > ((node: United.Log.Message) => node.severity);
+            }
+
+            print(object: United.Log.Message) {
+                if (object.severity == undefined) {
+                    object.severity = United.Log.Severity.information;
+                }
+                this.store.enqueue(object);
+                if (object.severity == United.Log.Severity.critical) {
+                    throw new Error(object.message);
+                } else if (object.severity == United.Log.Severity.major) {
+                    console.warn(object.message);
+                } else {
+                    console.log(object.message);
+                }
+            }
+
+            get(): void {
+                throw new United.Exception.NotImplemented();
+            }
+        }
+    }
+
     /*
         Addons abstract class (auto-register to the active scene and auto update the addon).
     */
