@@ -709,75 +709,168 @@ namespace United {
 
     }
 
-    export interface Scenes_Storages {
+    /*
+        United Scene
+    */
+    export class Scene<T> extends EventEmitter {
+
+        public name: string;
+        public asset: string;
+        public self: United.Collections.Chunk<T>;
+        public chunks: United.Collections.Chunk<any>[];
+        public addons: United.Addons[];
+
+        constructor(arg: sceneRegistering<T>) {
+            super();
+            if (!United.Tree.exist(arg.asset)) {
+                throw new United.Exception.InternalError(`Impossible de charger la scène ${arg.name} à partir de l'arbre superpowers !! Chemin => ${arg.asset}`);
+            }
+            this.reset();
+            this.name   = arg.name;
+            this.asset  = arg.asset;
+            this.self   = arg.chunk ? arg.chunk : new United.Collections.Chunk<T>();
+            United.Engine.registerScene<T>(this);
+        }
+
+        reset() : void {
+            this.addons = [];
+            this.chunks = [];
+        }
+    }
+
+    /*
+        United Engine
+    */
+    interface registeringAddon<T extends United.Addons> {
+        addon: T;
+        sceneName?: string;
+        globalRegistering?: boolean;
+        parentAddon?: boolean;
+    }
+
+    export interface sceneRegistering<T> {
         name: string;
-        scenePath: string;
-        addons?: United.Addons[];
+        asset: string;
+        chunk?: United.Collections.Chunk<T> ;
     }
 
     export class Engine {
 
-        public static activeScene: string;
-        public static active: boolean = true;
+        public static running: boolean = true;
+        public static events: EventEmitter = new EventEmitter();
 
-        private static updated: boolean = false;
-        private static storageScenes : { [key:string] : United.Scenes_Storages } = {};
+        private static scenes: United.Collections.Map<United.Scene<any>> = new United.Collections.Map<United.Scene<any>>();
+        private static addons: United.Addons[] = [];
+        private static __activeScene: string;
 
-        public static chunk : United.Collections.Chunk<any> = new United.Collections.Chunk<any>();
-        public static get $() : United.Collections.Chunk<any> {
-            return this.chunk.$;
+        public static $<T>(): T {
+            return this.scenes.get(this.activeScene).self.$ as T;
         }
 
-        public static registerAddon<T extends United.Addons>(addon: T,scene?: string) : boolean {
-            let ActiveScene : string = scene || this.activeScene;
-            if(!ActiveScene) {
-                throw new Error(`Impossible d'enregister un addon alors qu'il n'existe aucune scène courante!`);
+        public static get activeScene(): string {
+            return this.__activeScene;
+        }
+
+        public static set activeScene(name: string) {
+            this.loadScene(name);
+        }
+
+        public static ifAddonRegistered<T extends United.Addons> (addon: T): boolean {
+            if (this.addons.indexOf(addon) != -1) return true;
+            for (let value of this.scenes.values())
+                if (value.addons.indexOf(addon) != -1) return true;
+            return false;
+        }
+
+        public static registerAddon<T extends United.Addons> (option: registeringAddon<T>): boolean {
+            const activeScene: string = option.sceneName || this.__activeScene;
+            if ((typeof activeScene) === "undefined") {
+                throw new United.Exception.InternalError(`Impossible d'enregister un addon alors qu'il n'existe aucune scène courante!`);
             }
-            if(ActiveScene != this.activeScene) {
-                console.warn("Impossible de charger un addon sur une scène non-courante!");
-                return false;
+
+            if (option.parentAddon) {
+                if (!this.ifAddonRegistered(option.addon.parent)) {
+                    return false;
+                }
             }
-            this.storageScenes[ActiveScene].addons.push(addon);
+
+            if (option.addon.lockingName) {
+                if (activeScene != option.addon.lockingName) {
+                    console.warn(`explicit addon ${option.addon.__name} registering out of authorized locking => ${option.addon.lockingName}`)
+                    return false;
+                }
+            }
+            this.events.emit("registeringAddon",option.addon);
+            this.scenes.get(activeScene).addons.push(option.addon);
             return true;
         }
 
-        public static addScene(name: string,assetPath: string) : boolean {
-            if(!United.Tree.exist(assetPath)) {
-                throw new Error(`Impossible de charger la scène ${name} à partir de l'arbre superpowers !! Chemin => ${assetPath}`);
+        public static restrictChunk<T>(chunk: United.Collections.Chunk<T> , sceneName: string) : void {
+            if (this.scenes.has(sceneName)) {
+                if (this.__activeScene != sceneName) {
+                    chunk.authentification = true;
+                }
+                this.scenes.get(sceneName).chunks.push(chunk);
             }
+        }
 
-            if(!this.storageScenes[name] ) {
-                if(!this.activeScene) {
-                    this.activeScene = name;
+        public static registerScene<T>(scene: United.Scene<T>): boolean {
+            if (!this.scenes.has(scene.name)) {
+                if (this.__activeScene == undefined) {
+                    this.activeScene = scene.name;
                 }
-                this.storageScenes[name] = {
-                    name: name,
-                    scenePath: assetPath,
-                    addons: []
-                }
+                this.scenes.add(scene.name, scene);
                 return true;
             }
             return false;
         }
 
-        public static loadScene(name: string) : boolean {
-            if(this.storageScenes[name]) {
-                this.storageScenes[this.activeScene].addons = [];
+        public static startupScene(name: string) : void {
+            if(!this.scenes.has(name)) {
+                throw new United.Exception.InternalError(`No game scene with the name => ${name}`);
+            }
+            Sup.setTimeout(10,() => {
                 this.activeScene = name;
-                Sup.loadScene(this.storageScenes[name].scenePath);
-                return true;
+            });
+        }
+
+        protected static loadScene(name: string): void {
+            if (this.scenes.has(name)) {
+                if(this.__activeScene != undefined) {
+                    const oldScene: United.Scene<any> = this.scenes.get(this.__activeScene);
+                    oldScene.reset();
+                    oldScene.emit("die");
+                }
+                this.__activeScene = name;
+                const focusedScene: United.Scene<any> = this.scenes.get(name);
+                focusedScene.emit("load");
+                this.events.emit("loadingScene");
+                Sup.loadScene(focusedScene.asset);
             }
-            return false;
         }
 
-        public static break(sleepTime?:number) : void {
-            this.active = false;
-            if(sleepTime) setTimeout(() => this.active = true,sleepTime*1000);
+        public static stopExecution(sleepTime: number = 0) : void {
+            this.running = false;
+            this.events.emit("stopExecution");
+            if(sleepTime > 0) {
+                Sup.setTimeout(sleepTime * 1000,() => this.running = true);
+            }
         }
 
-        public static update() : void {
-            if(this.active && this.activeScene) {
-                this.storageScenes[this.activeScene].addons.forEach( (addon: United.Addons) => addon.update());
+        public static clean() : void {
+            this.addons = [];
+        }
+
+        public static update() {
+            if (this.running && this.__activeScene) {
+                this.addons.forEach((addon: United.Addons) => {
+                    addon.update();
+                });
+                this.scenes.get(this.__activeScene).addons.forEach((addon: United.Addons) => {
+                    if (addon.lockingName === undefined || this.activeScene == addon.lockingName) {
+                        addon.update();
+                    }
+                });
             }
         }
 
