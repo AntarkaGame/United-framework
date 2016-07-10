@@ -448,6 +448,7 @@ namespace United {
     export const Path : string = "United/fonts/";
     export const Main : () => void  = function() {
         United.Engine.update();
+        window.requestAnimationFrame(United.Main);
     }
 
     export namespace Utils {
@@ -991,5 +992,10 @@ namespace United {
 
 }
 import U = United;
-United.Main();
-Sup.setInterval(1000 / United.FPS,United.Main);
+if(window.requestAnimationFrame) {
+    window.requestAnimationFrame(United.Main);
+}
+else {
+    United.Main();
+    Sup.setInterval(1000/U.FPS,United.Main);
+}
