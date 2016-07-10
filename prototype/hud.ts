@@ -1,6 +1,6 @@
 namespace United {
 
-    export class HUD extends United.Addons {
+    export class HUD extends United.Addon {
 
         static active_container: Sup.Math.Vector3   = new Sup.Math.Vector3(0,0,0);
         static inactive_container: Sup.Math.Vector3 = new Sup.Math.Vector3(200,0,0);
@@ -19,6 +19,8 @@ namespace United {
             }
             this.CameraActor = CameraActor;
             this.Rayon = new Sup.Math.Ray(CameraActor.getPosition(),new Sup.Math.Vector3(0,0,-1));
+            this.Rayon.setFromCamera(this.CameraActor.camera,Sup.Input.getMousePosition());
+            United.Addons.HUD = this;
         }
 
         addContainer(containers: Sup.Actor[]) : void {
@@ -51,32 +53,39 @@ namespace United {
 
     }
 
-    export class Button extends United.Addons {
+    export class Button extends United.Addon {
 
         actor: Sup.Actor;
         private hover: boolean = false;
+        private asset: string;
 
         constructor(actor: Sup.Actor) {
             super({
                 defaultName: "Button"
             });
             this.actor = actor;
-            if(!this.actor.spriteRenderer) {
+            if(this.actor.spriteRenderer == undefined) {
                 throw new United.Exception.InternalError("Fail to define a button with no spriteRenderer on the actor!");
+            }
+            else {
+                this.asset = this.actor.spriteRenderer.getSprite().path;
+            }
+            if(United.Addons.HUD == undefined) {
+                throw new United.Exception.InternalError("You cannot declare button without HUD class.");
             }
         }
 
         setSprite(asset: string) : void {
-            if(United.Tree.exist(asset)) {
+            if(United.Tree.exist(asset) && asset != this.asset) {
                 this.actor.spriteRenderer.setSprite(asset);
+                this.asset = asset;
             }
         }
 
         update() : void {
 
-            const Rayon : Sup.Math.Ray = United.Engine.$<IGame>().hud.Rayon;
-            if(Rayon.intersectActor(this.actor,true).length > 0) {
-                if(United.Mouse.left) {
+            if(United.Addons.HUD.Rayon.intersectActor(this.actor,false).length > 0) {
+                if(Sup.Input.wasMouseButtonJustPressed(0)) {
                     this.emit("click");
                 }
                 if(!this.hover) {
