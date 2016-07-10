@@ -629,14 +629,14 @@ namespace United {
         defaultName: string;
         global?: boolean;
         lockingScene?: string;
-        parentAddon ?: United.Addons;
+        parentAddon ?: United.Addon;
     }
 
-    export abstract class Addons extends EventEmitter {
+    export abstract class Addon extends EventEmitter {
 
         public __name: string = "Undefined_plugin";
         private __lockName: string;
-        private __parentAddon: United.Addons;
+        private __parentAddon: United.Addon;
         protected log: United.Log.Main;
 
         constructor(constructorOpt: AddonConstructor) {
@@ -664,11 +664,27 @@ namespace United {
             return this.__lockName;
         }
 
-        get parent(): United.Addons {
+        get parent(): United.Addon {
             return this.__parentAddon;
         }
 
         abstract update();
+    }
+
+    export class Addons {
+        static HUD: United.HUD;
+
+        static isDeclared(addonName: string) : boolean {
+            return this[addonName] ? true : false;
+        }
+
+        static declare<T extends United.Addon>(addonName: string,instance: T) : boolean {
+            if(!this[addonName]) {
+                this[addonName] = instance;
+                return true;
+            }
+            return false;
+        }
     }
 
     /*
@@ -718,7 +734,7 @@ namespace United {
         public asset: string;
         public self: United.Collections.Chunk<T>;
         public chunks: United.Collections.Chunk<any>[];
-        public addons: United.Addons[];
+        public addons: United.Addon[];
 
         constructor(arg: sceneRegistering<T>) {
             super();
@@ -741,7 +757,7 @@ namespace United {
     /*
         United Engine
     */
-    interface registeringAddon<T extends United.Addons> {
+    interface registeringAddon<T extends United.Addon> {
         addon: T;
         sceneName?: string;
         globalRegistering?: boolean;
@@ -760,7 +776,7 @@ namespace United {
         public static events: EventEmitter = new EventEmitter();
 
         private static scenes: United.Collections.Map<United.Scene<any>> = new United.Collections.Map<United.Scene<any>>();
-        private static addons: United.Addons[] = [];
+        private static addons: United.Addon[] = [];
         private static __activeScene: string;
 
         public static $<T>(): T {
@@ -775,14 +791,14 @@ namespace United {
             this.loadScene(name);
         }
 
-        public static ifAddonRegistered<T extends United.Addons> (addon: T): boolean {
+        public static ifAddonRegistered<T extends United.Addon> (addon: T): boolean {
             if (this.addons.indexOf(addon) != -1) return true;
             for (let value of this.scenes.values())
                 if (value.addons.indexOf(addon) != -1) return true;
             return false;
         }
 
-        public static registerAddon<T extends United.Addons> (option: registeringAddon<T>): boolean {
+        public static registerAddon<T extends United.Addon> (option: registeringAddon<T>): boolean {
             const activeScene: string = option.sceneName || this.__activeScene;
             if ((typeof activeScene) === "undefined") {
                 throw new United.Exception.InternalError(`Impossible d'enregister un addon alors qu'il n'existe aucune scène courante!`);
@@ -863,10 +879,10 @@ namespace United {
 
         public static update() {
             if (this.running && this.__activeScene) {
-                this.addons.forEach((addon: United.Addons) => {
+                this.addons.forEach((addon: United.Addon) => {
                     addon.update();
                 });
-                this.scenes.get(this.__activeScene).addons.forEach((addon: United.Addons) => {
+                this.scenes.get(this.__activeScene).addons.forEach((addon: United.Addon) => {
                     if (addon.lockingName === undefined || this.activeScene == addon.lockingName) {
                         addon.update();
                     }
@@ -943,7 +959,7 @@ namespace United {
 
     }
 
-    export class Timer extends United.Addons {
+    export class Timer extends United.Addon {
 
         private elapsedFrame: number;
         private started: boolean;

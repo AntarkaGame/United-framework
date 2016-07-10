@@ -97,7 +97,7 @@ namespace United {
             startRandom?: boolean
         }
 
-        export class Playlist extends United.Addons {
+        export class Playlist extends United.Addon {
 
             private activeTrack : number;
             public isPlaying : boolean = false;
