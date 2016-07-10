@@ -13,10 +13,13 @@ namespace United {
             private defaultValues : I;
             private _auth : boolean;
 
-            constructor() {
+            constructor(defaultValues?: I) {
                 this._auth = true;
                 this.$ = <I>{};
                 this.defaultValues = <I>{};
+                if(defaultValues != undefined) {
+                    this.declare(defaultValues);
+                }
             }
 
             public set authentification(value: boolean) {
