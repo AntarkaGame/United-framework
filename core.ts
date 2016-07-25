@@ -799,6 +799,10 @@ namespace United {
             this.loadScene(name);
         }
 
+        public static hasScene(sceneName: string) : boolean {
+            return this.scenes.has(sceneName);
+        }
+
         public static ifAddonRegistered<T extends United.Addon> (addon: T): boolean {
             if (this.addons.indexOf(addon) != -1) return true;
             for (let value of this.scenes.values())
