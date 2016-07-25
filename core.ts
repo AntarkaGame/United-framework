@@ -500,6 +500,10 @@ namespace United {
           return window.Math.random() * (max - min) + min;
         }
 
+        export function linearRemap(current: number, fromMin: number, fromMax: number, toMin: number, toMax: number) : number {
+            return (((current - fromMin) * (toMax - toMin)) / (fromMax - fromMin)) + toMin;
+        }
+
     }
 
     export namespace Exception {
