@@ -863,11 +863,11 @@ namespace United {
                 if(this.__activeScene != undefined) {
                     const oldScene: United.Scene<any> = this.scenes.get(this.__activeScene);
                     oldScene.reset();
-                    oldScene.emit("die");
+                    oldScene.emit("die",oldScene.self);
                 }
                 this.__activeScene = name;
                 const focusedScene: United.Scene<any> = this.scenes.get(name);
-                focusedScene.emit("load");
+                focusedScene.emit("load",focusedScene.self);
                 this.events.emit("loadingScene");
                 Sup.loadScene(focusedScene.asset);
             }
