@@ -139,11 +139,11 @@ namespace United {
             has(value: T | T[]) : boolean {
                 if(value instanceof Array) {
                     for(const k in value)
-                        if(!~this.__inner.indexOf(value[k]))
+                        if(this.__inner.indexOf(value[k]) == -1)
                             return false;
                     return true;
                 }
-                return ~this.__inner.indexOf(<T>value);
+                return this.__inner.indexOf(<T>value) != -1 ? true : false;
             }
             contains = this.has;
 
