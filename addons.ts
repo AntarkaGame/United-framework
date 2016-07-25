@@ -108,7 +108,8 @@ namespace United {
 
             constructor(private tracksList : { [key:number] : United.Audio.trackOption },options?: playlistOption) {
                 super({
-                    defaultName: "Playlist"
+                    defaultName: "Playlist",
+                    global: true
                 });
                 this.playlistSize = United.Utils.objectSize(this.tracksList);
                 let track : number;
