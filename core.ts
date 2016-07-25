@@ -807,6 +807,10 @@ namespace United {
         }
 
         public static registerAddon<T extends United.Addon> (option: registeringAddon<T>): boolean {
+            if(option.globalRegistering) {
+                this.addons.push(option.addon);
+                return true;
+            }
             const activeScene: string = option.sceneName || this.__activeScene;
             if ((typeof activeScene) === "undefined") {
                 throw new United.Exception.InternalError(`Impossible d'enregister un addon alors qu'il n'existe aucune scène courante!`);
