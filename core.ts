@@ -22,6 +22,10 @@ namespace United {
                 }
             }
 
+            clone() : United.Collections.Chunk<I> {
+                return new United.Collections.Chunk<I>(this.$);
+            }
+
             public set authentification(value: boolean) {
                 if(!value) {
                     Sup.log("Info :: authentification false is set on one chunk!");
