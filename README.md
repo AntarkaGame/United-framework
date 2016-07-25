@@ -1,12 +1,14 @@
-> Warning breaking change are comming in the V1.2. ETA 17/07/2016
-
-# United framework v1.1
+# United framework v1.2
 
 The united framework bring a structure to build your game on a safe and flexible foundation. We made it to be efficient and type safe. We are targeting a framework capable of controlling it's execution environment to be sure that all parts of the game is under control.
 
 United-framework is a `high-level implementation for Superpowers components`. The goal is not changing the original superpowers behaviors (that can be the bigest mistake your made).
 
 This framework is under development and we need your help to make new cool addons !
+
+# Game made with the framework
+
+[Echo of life](https://antarka.itch.io/echo-of-life)
 
 # Wiki
 
