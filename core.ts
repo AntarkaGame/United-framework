@@ -1026,6 +1026,102 @@ namespace United {
 
     }
 
+    export namespace Area {
+
+        export interface target {
+            actor: Sup.Actor;
+            minDistance: number;
+            state: boolean;
+        }
+
+        export class Pools extends United.Addon {
+
+            areaActor: Sup.Actor;
+            targets: United.Area.target[];
+
+            constructor(areaActor: Sup.Actor) {
+                super({
+                    defaultName: "AreaPools"
+                });
+                this.areaActor = areaActor;
+                this.targets = [];
+            }
+
+            addTarget(targetActor: Sup.Actor,minDistance: number) {
+                this.targets.push({
+                    actor: targetActor,
+                    minDistance: minDistance,
+                    state: false
+                });
+            }
+
+            recycle() : void {
+                this.targets = [];
+            }
+
+            update(): void {
+                if(this.targets.length > 0) {
+                    const refPosition: Sup.Math.Vector3 = this.areaActor.getPosition();
+                    let i : number = 0;
+                    for (; i < this.targets.length; i++) {
+                        const target: United.Area.target = this.targets[i];
+                        if(target.actor.getPosition().distanceTo(refPosition) <= target.minDistance) {
+                            this.emit("in",target.actor);
+                            if(!target.state) {
+                                this.emit("actorIn",target.actor);
+                                target.state = true;
+                            }
+                        }
+                        else {
+                            this.emit("out",target.actor);
+                            if(target.state) {
+                                this.emit("actorOut",target.actor);
+                                target.state = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        export class Behavior<T> extends Sup.Behavior {
+
+            protected __inner: United.Area.Pools;
+
+            constructor(actor: Sup.Actor) {
+                super(actor);
+            }
+
+            protected get $(): T {
+                return United.Engine.$<T>();
+            }
+
+            actorIn(targetActor?: Sup.Actor) {}
+            actorOut(targetActor?: Sup.Actor) {}
+            _in(targetActor?: Sup.Actor) {}
+            _out(targetActor?: Sup.Actor) {}
+
+            init() {}
+
+            awake() {
+                this.__inner = new United.Area.Pools(this.actor);
+                this.__inner.on("in",this._in);
+                this.__inner.on("out",this._out);
+                this.__inner.on("actorIn",this.actorIn);
+                this.__inner.on("actorOut",this.actorOut);
+                this.init();
+            }
+
+            addTarget(targetActor: Sup.Actor,minDistance: number) {
+                this.__inner.addTarget(targetActor,minDistance);
+            }
+
+            start() {}
+            onDestroy() {}
+            update() {}
+        }
+
+    }
 }
 import U = United;
 if(window.requestAnimationFrame) {
