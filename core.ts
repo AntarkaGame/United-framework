@@ -1004,6 +1004,10 @@ namespace United {
             return 0;
         }
 
+        public getTick(interval: number) : number {
+            return this.elapsedFrame % interval;
+        }
+
         public update() : void {
             if(this.started) this.elapsedFrame++;
         }
