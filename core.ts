@@ -271,19 +271,13 @@ namespace United {
             join        = (separator?: string) : string => this.__inner.join(separator);
         }
 
-        export interface KeyValue<V> {
-            key: string;
-            value: V;
-        }
-
+        export type KeyValue<V> = {[key: string]: V};
         export class Map<V> {
 
-            private __inner: {
-                [key: string]: V
-            };
+            private __inner: KeyValue<V>;
 
             constructor(O?: KeyValue<V>) {
-                this.__inner = {};
+                this.__inner = O || {};
             }
 
             add(key: string, value: V): boolean {
@@ -332,7 +326,7 @@ namespace United {
                 return temp;
             }
 
-            entries(): KeyValue<V>[] {
+            entries(): {key: string,value: V}[] {
                 const temp: {
                     key: string,
                     value: V
