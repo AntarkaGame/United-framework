@@ -271,6 +271,83 @@ namespace United {
             join        = (separator?: string) : string => this.__inner.join(separator);
         }
 
+        export interface KeyValue<V> {
+            key: string;
+            value: V;
+        }
+
+        export class Map<V> {
+
+            private __inner: {
+                [key: string]: V
+            };
+
+            constructor(O?: KeyValue<V>) {
+                this.__inner = {};
+            }
+
+            add(key: string, value: V): boolean {
+                if (!this.has(key)) {
+                    this.__inner[key] = value;
+                    return true;
+                }
+                return false;
+            }
+            push = this.add;
+
+            remove(key: string): boolean {
+                if (this.has(key)) {
+                    delete this.__inner[key];
+                    return true;
+                }
+                return false;
+            }
+
+            update(key: string, value: V): boolean {
+                if (this.has(key)) {
+                    this.__inner[key] = value;
+                    return true;
+                }
+                return false;
+            }
+
+            has(key: string): boolean {
+                return this.__inner.hasOwnProperty(key) ? true : false;
+            }
+            contains = this.has;
+
+            get(key: string): V {
+                return this.has(key) ? this.__inner[key] : undefined;
+            }
+
+            keys(): string[] {
+                return Object.keys(this.__inner);
+            }
+
+            values(): V[] {
+                const temp: V[] = [];
+                for (let key of this.keys()) {
+                    temp.push(this.__inner[key]);
+                }
+                return temp;
+            }
+
+            entries(): KeyValue<V>[] {
+                const temp: {
+                    key: string,
+                    value: V
+                }[] = [];
+                for (let key in this.__inner) {
+                    temp.push({
+                        key: key,
+                        value: this.__inner[key]
+                    });
+                }
+                return temp;
+            }
+
+        }
+
         export class Set<T> extends List<T> {
 
             constructor(Set? : T[]) {
