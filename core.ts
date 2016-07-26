@@ -326,16 +326,10 @@ namespace United {
                 return temp;
             }
 
-            entries(): {key: string,value: V}[] {
-                const temp: {
-                    key: string,
-                    value: V
-                }[] = [];
+            entries(): [string,V][] {
+                const temp: [string,V][] = [];
                 for (let key in this.__inner) {
-                    temp.push({
-                        key: key,
-                        value: this.__inner[key]
-                    });
+                    temp.push([key,this.__inner[key]]);
                 }
                 return temp;
             }
