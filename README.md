@@ -2,7 +2,7 @@
 
 # United framework v1.2
 
-The united framework bring a structure to build your game on a safe and flexible foundation. We made it to be efficient and type safe. We are targeting a framework capable of controlling it's execution environment to be sure that all parts of the game is under control.
+The United framework bring a structure to build your game on a safe and flexible foundation. We made it to be efficient and type safe. We are targeting a framework capable of controlling it's execution environment to be sure that all parts of the game is under control.
 
 United-framework is a `high-level implementation for Superpowers components`. The goal is not changing the original superpowers behaviors (that can be the bigest mistake your made).
 
@@ -29,6 +29,7 @@ First, make a script named "Globals" on your superpowers project and put it unde
 Now register your main scenes into the engine :
 
 ```ts
+// Variables accessible from GameScene scripts.
 interface IGame {
     player?: Sup.Actor;
     map?: Sup.Actor;
@@ -40,8 +41,8 @@ const GameScene: United.Scene<IGame> = new United.Scene<IGame>({
     name: "game",
     asset: "Project/Scenes/Game",
     chunk: new United.Collections.Chunk<IGame>({
-            maxLife: 4,
-            pause: false
+        maxLife: 4,
+        pause: false
     })
 });
 
@@ -69,14 +70,13 @@ Make your own addons for your game ! For an example look into the [documentation
 # Roadmap (Core)
 
 - Make a superpowers plugin that work with git.
-- Make a complete wiki!
-- Update collections (better performance, better methodes ...)
-- Add immutables collections.
+- Complete the wiki.
+- Work on collections.
 - Add a log class (core). All official addons must have a log system installed!
 - Work on a mapActor method for the Engine and the Scene chunk.
 - Create an observe/mapping system for chunk with EventEmitter.
 - Work on better addons reliability.
-- Add workers support for to do multi-threading. (Usefull for particules or generation system).
+- Add workers support for multi-threading.
 
 # Roadmap plugins
 
