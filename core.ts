@@ -1155,43 +1155,6 @@ namespace United {
             }
         }
 
-        export class Behavior<T> extends Sup.Behavior {
-
-            protected __inner: United.Area.Pools;
-
-            constructor(actor: Sup.Actor) {
-                super(actor);
-            }
-
-            protected get $(): T {
-                return United.Engine.$<T>();
-            }
-
-            actorIn(targetActor?: Sup.Actor) {}
-            actorOut(targetActor?: Sup.Actor) {}
-            _in(targetActor?: Sup.Actor) {}
-            _out(targetActor?: Sup.Actor) {}
-
-            init() {}
-
-            awake() {
-                this.__inner = new United.Area.Pools(this.actor);
-                this.__inner.on("in",this._in);
-                this.__inner.on("out",this._out);
-                this.__inner.on("actorIn",this.actorIn);
-                this.__inner.on("actorOut",this.actorOut);
-                this.init();
-            }
-
-            addTarget(targetActor: Sup.Actor,minDistance: number) {
-                this.__inner.addTarget(targetActor,minDistance);
-            }
-
-            start() {}
-            onDestroy() {}
-            update() {}
-        }
-
     }
 }
 import U = United;
