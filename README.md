@@ -28,14 +28,22 @@ Now register your main scenes into the engine :
 
 ```ts
 interface IGame {
-    Map: Sup.Actor;
+    player?: Sup.Actor;
+    map?: Sup.Actor;
+    maxLife?: number;
+    pause?: boolean;
 }
 
 const GameScene: United.Scene<IGame> = new United.Scene<IGame>({
     name: "game",
-    asset: "Project/Scenes/Game"
+    asset: "Project/Scenes/Game",
+    chunk: new United.Collections.Chunk<IGame>({
+            maxLife: 4,
+            pause: false
+    })
 });
 
+// Catch load and die event!
 GameScene.on("load",() => {
     Sup.log("Game scene is loaded !!!");
 });
@@ -47,7 +55,7 @@ United.Engine.startupScene("game"); // Dont set a "default" scene on superpowers
 Addons & Engine work with no help ! If you want to change the scene dont use Sup.loadScene but :
 
 ```ts
-United.Engine.loadScene("game");
+United.Engine.activeScene = "Menu";
 ```
 
 Engine have to work on clearing inactive addons & inactive variables from the activeScene before switching to the new scene.
