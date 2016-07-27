@@ -70,7 +70,7 @@ Make your own addons for your game ! For an example look into the [documentation
 # Roadmap (Core)
 
 - Make a superpowers plugin that work with git.
-- Complete the wiki.
+- [HELP] Complete the wiki.
 - Work on collections.
 - Work on appendScene (Major release).
 - Add scanner as a native part of the engine.
@@ -79,15 +79,16 @@ Make your own addons for your game ! For an example look into the [documentation
 - Create an observe/mapping system for chunk with EventEmitter.
 - Work on better addons reliability.
 - Add workers support for multi-threading.
-- Rework Scanner API (Better performance and flexibility).
+- [HELP] Rework Scanner API (Better performance and flexibility).
+- [HELP] Make toFormat(format: string) on Timer API.
 
 # Roadmap plugins
 
 - Add gamepad support to StackControls. (Review loading by purexo).
 - Add more mouse inputs shortcuts, remap native KeyEvents, add fallback & new clean error throw for invalid key name.
 - Add Astar addon.
-- HUD complete set. (Inputs)
+- [HELP] HUD complete set. (Inputs)
 - Tilemap addon. (Complexe calcule on cell). Make Easy IA with Astar.
 - 2DCamera addon (Smooth movement, cool and generic methods).
-- Particules addon.
-- Langage addon with integrated variables.
+- [HELP] Particules addon.
+- [HELP] Langage addon with integrated variables.
