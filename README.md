@@ -81,6 +81,7 @@ Make your own addons for your game ! For an example look into the [documentation
 - Add workers support for multi-threading.
 - [HELP] Rework Scanner API (Better performance and flexibility).
 - [HELP] Make toFormat(format: string) on Timer API.
+- Add United.Clock to the core framework. (Global timer).
 
 # Roadmap plugins
 
